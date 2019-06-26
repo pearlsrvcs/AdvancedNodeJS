@@ -1,0 +1,18 @@
+set-cookie: session=eyJwYXNzcG9ydCI6eyJ1c2VyIjoiNWQwNGYwZGE2NGZjNjMyOGYxNzZmZGRkIn19; path=/; expires=Thu, 25 Jul 2019 12:22:19 GMT; httponly
+set-cookie: session.sig=6LqmjnIYZJlqHaeOgXQoimda1cU; path=/; expires=Thu, 25 Jul 2019 12:22:19 GMT; httponly
+
+eyJwYXNzcG9ydCI6eyJ1c2VyIjoiNWQwNGYwZGE2NGZjNjMyOGYxNzZmZGRkIn19
+6LqmjnIYZJlqHaeOgXQoimda1cU
+
+node
+const session = 'eyJwYXNzcG9ydCI6eyJ1c2VyIjoiNWQwNGYwZGE2NGZjNjMyOGYxNzZmZGRkIn19'
+const Buffer = require('safe-buffer').Buffer
+Buffer.from('session', 'base64').toString('utf8')
+ returns: '{"passport":{"user":"5d04f0da64fc6328f176fddd"}}
+
+uses a special cookie key, defined in either dev or prod
+const Keygrip = require('keygrip')
+const keygrip = new Keygrip(['123123123'])  -- this uses that special cookie key
+keygrip.sign('session=' + session)
+keygrip.verify('session=' + session, '6LqmjnIYZJlqHaeOgXQoimda1cU')
+  should return 'true'
